@@ -29,7 +29,8 @@ def main():
     graph.add_directed_edge('2', '3')
     graph.add_directed_edge('4', '6')
     print(graph.vertices)
-
+    print(graph.bfs('1', '6'))
+    print(graph.bft('1', '6'))
 if __name__ == '__main__':
     # TODO - parse argv
     main()
