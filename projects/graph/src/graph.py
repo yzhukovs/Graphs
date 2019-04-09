@@ -16,6 +16,21 @@ class Queue():
     def size(self):
         return len(self.queue)        
 
+class Stack:
+    def __init__(self):
+        self.stack = []
+    def push(self, value):    # O(1)
+        self.stack.append(value)
+    def pop(self):
+        if self.size() > 0:
+            return self.stack.pop()
+        else:
+            return None
+    def size(self):
+        return len(self.stack)
+
+
+
 class Graph:
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
     def __init__(self):
@@ -64,8 +79,6 @@ class Graph:
     def bfs(self, starting_vertex_id, target_vertex):
         # Create an empty queue
         q = Queue()
-            
-
         # Create a visited set
         visited = []
         # Enqueue [A PATH TO] the starting vertex to the queue
@@ -95,4 +108,24 @@ class Graph:
                     new_path.append(next_vertex)
                     # ENQUEUE THE NEW PATH   
                     q.enqueue(new_path) 
-        return False                
+        return False
+
+    def dfs(self, starting_vertex_id, target_vertex):
+        s = Stack()
+        visited = []
+        s.push([starting_vertex_id])
+        while s.size() > 0:
+            path = s.pop()
+            last_node = path[-1] # last node in path
+            if last_node not in visited:
+                print(last_node)
+                visited.append(last_node)
+            if last_node == target_vertex:
+                return path
+            for next_node in self.vertices[last_node]:
+                new_path = path.copy()
+                new_path.append(next_node)
+                s.push(new_path)
+
+            return False
+            
