@@ -68,6 +68,7 @@ traversalGraph = {} # dictionary for graph traversal
 
 while len(traversalGraph) < len(roomGraph):
     exiting = {} #dictionary to store exits
+    print(player.currentRoom)
  
     if player.currentRoom.id not in traversalGraph:    
         # assign "?" to an exit int he room
@@ -78,7 +79,8 @@ while len(traversalGraph) < len(roomGraph):
     
     #get the available exit in the room on the graph
     exiting = traversalGraph[player.currentRoom.id]
-    print(exiting)
+    # for i in sorted(exiting.keys()):
+    #     print(i, exiting)
     
     # Boolean that indicates if we have an exit if we don't we have to go back. 
     open_exits = False
@@ -88,18 +90,20 @@ while len(traversalGraph) < len(roomGraph):
             # goes to the room and checks for exits availability
             player.travel(direction)
             traversalPath.append(direction)
-            # assign exit "?" to the actual room
+            
             exiting[direction] = player.currentRoom.id
             # If it's not there add a room
             if exiting[direction] not in traversalGraph:
-                #Checking the room for exits
+                #Checking the room for exits and we haven't been there 
                 room_exit = {} 
-                for exits in player.currentRoom.getExits():
-                    room_exit[exits] = '?'
                 
+                for exits in player.currentRoom.getExits():
+                    room_exit[exits] = '?' 
+
                #reassign the current room
                 room_exit[other_direction(direction)] = player.currentRoom.id 
                 traversalGraph[exiting[direction]] = room_exit
+                #print(room_exit)
             else:
                 # Indicate the existing room we came freom 
                 traversalGraph[exiting[direction]][other_direction(direction)] = player.currentRoom.id
@@ -115,7 +119,7 @@ while len(traversalGraph) < len(roomGraph):
                 for direction, exit in traversalGraph[exiting[direction]].items(): #looping to explore more exits
                     if exit == '?': # if we didn't the exit we travel again
                         open_exits = False    
-            
+
             
             s.push(other_direction(direction)) # Adding path to the stack so we can return back in case we get stuck
             
@@ -134,7 +138,7 @@ while len(traversalGraph) < len(roomGraph):
         traversalPath.append(going_back)    
     
 
-#    print(f"{player.currentRoom} {len(traversalPath)} {len(traversalGraph)}  ")
+#print(f"{player.currentRoom} {len(traversalPath)} {len(traversalGraph)}  ")
 
 
 
@@ -150,6 +154,7 @@ for move in traversalPath:
 
 if len(visited_rooms) == len(roomGraph):
     print(f"TESTS PASSED: {len(traversalPath)} moves, {len(visited_rooms)} rooms visited")
+    print(f"{len(roomGraph) - len(visited_rooms)} unvisited rooms")
 else:
     print("TESTS FAILED: INCOMPLETE TRAVERSAL")
     print(f"{len(roomGraph) - len(visited_rooms)} unvisited rooms")
